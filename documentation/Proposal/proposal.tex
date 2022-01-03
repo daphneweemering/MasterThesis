@@ -1,0 +1,142 @@
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage[natbib=true,backend=biber,sorting=nyt,style=apa]{biblatex}
+\usepackage[a4paper, total={6in, 8in}]{geometry}
+\addbibresource{references.bib}
+
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TITLE PAGE %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{titlepage}
+\begin{center}
+
+\vspace*{0.01cm}
+THESIS PROPOSAL (REVISED) \\
+
+\vspace{2cm}
+\Large
+\textbf{Interim sample size re-estimation for adequately powered series of \textit{N}-of-1 trials} \\
+
+\vspace{2cm}
+\large
+{Daphne Weemering (3239480)} \\
+
+\vspace{0.3cm}
+Supervisor: Peter van de Ven \\
+
+\vspace{2cm}
+\large
+\textit{Methodology and Statistics for the Behavioral, Biomedical and Social Sciences} \\
+
+\vspace{0.3cm}
+Utrecht University \\
+
+\vspace{1.5cm}
+\large 
+November 9, 2021 \\
+
+\vspace{4.6cm}
+Word count: 750
+
+\vspace{1cm} 
+Journal of publication: Statistics in Medicine
+
+\end{center}
+\end{titlepage}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% BODY %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%% INTRODUCTION %%%%%%%%%%%%%%
+\section{Introduction}
+\subsection{The problem}
+Randomized controlled trials (RCTs) often require a relatively large sample size to have adequate power for detecting an effect in the population. This is not feasible for small populations, such as populations of people with a rare disease. \par
+
+A methodological framework that can offer a solution in this setting, is the \textit{N}-of-1 trial. A \textit{N}-of-1 trial is a within-subject randomized controlled multiple crossover trial, where a patient repeatedly receives the experimental and control intervention in a random order. By combining several \textit{N}-of-1 trials, we are able to estimate the population treatment effect. \par
+
+The number of subjects and cycles within a \textit{N}-of-1 trial is determined beforehand by means of sample size calculations. These calculations are challenging because important parameters such as the various variances are generally unknown before the start of the studies. If unrealistic assumptions are made with regard to these parameters, the study may be over- or underpowered. 
+
+
+%%%%%%%%%%%%%% WHAT IS KNOW & WHAT IS NOT KNOWN %%%%%%%%%%%%%%
+\subsection{What is and what isn't known?}
+Sample size formulas for \textit{N}-of-1 trials were derived by \textcite{<Senn>} for both random- and fixed-effects models. For this thesis the interest lies with random-effects models, since the main objective of aggregating \textit{N}-of-1 trials is to make inferences to the population. Random-effects models do require a larger sample size (\cite{<Senn>}). \par
+
+To conquer the problem of unrealistic assumptions for unknown parameters in sample size calculations, interim sample size re-estimation can be considered. Interim sample size re-estimation uses data that is already obtained to estimate the unknown parameters, and uses these estimates to recalculate the sample size.  \textcite{<Proschan>} established sample size re-estimation methods for standard RCTs based on estimates of the treatment effect and on estimates of nuisance parameters. For this thesis, the latter approach will be applied.  \textcite{Wych} investigate the application of sample size re-estimation in crossover trials, a methodology similar to \textit{N}-of-1 trials. They acknowledge that not much is known about sample size re-estimation for trials other than more 'standard' trials. \par
+
+The application of interim sample size re-estimation in \textit{N}-of-1 trials has not yet been investigated, and no specific methods and guidelines have been established. Also, it is yet unclear what the minimally required sample size is to carry out sample size re-estimation in \textit{N}-of-1 trials. 
+
+
+%%%%%%%%%%%%%% RESEARCH QUESTION %%%%%%%%%%%%%%
+\subsection{Research question}
+The following two research questions will be addressed:
+\begin{itemize}
+    \item How many patients and observations within patients must be observed in order to reliably (in terms of power) perform a sample size re-estimation for \textit{N}-of-1 trials?
+    \item How do series of \textit{N}-of-1 trials with sample size re-estimation compare to series of \textit{N}-of-1 trials without sample size re-estimation in terms of power and sample size?
+\end{itemize} \par
+
+\noindent When unknown variances are higher (/lower) compared to what is presumed beforehand, it is expected that a greater (/smaller) sample size is required. Therefore, we can expect that the approach applying sample size re-estimation will come closer to the desired power than the approach using a fixed sample size. 
+
+
+%%%%%%%%%%%%%% ANALYTIC STRATEGY %%%%%%%%%%%%%%
+\section{This project's strategy}
+To answer the research questions, the following steps should be taken:
+\begin{itemize}
+    \item Look for existing sample size re-estimation methods and make these suitable for the use in \textit{N}-of-1 trials.
+    \item Evaluate these re-estimation methods in a simulation study where sample size re-estimation methods will be compared with \textit{N}-of-1 trials with a fixed sample size. Methods will not be applied to empirical data. 
+    \begin{itemize}
+    \item The two approaches will be considered both in the situation where a priori assumptions about unknown parameters in the sample size calculations are realistic, and where these assumptions are not realistic. 
+    \item Statistical power, i.e., fraction of iterations where the treatment effect is significant, and the (expected) sample size will be used for evaluating the performance of both approaches.  
+    \end{itemize}
+\end{itemize}
+
+\noindent All analyses will be performed in R version 4.1.1 (\cite{R}). A linear mixed model will be used to simulate data for a series of \textit{N}-of-1 trials, with population model (following \textcite{<Senn>}):
+\begin{align*}
+d_{ij} & = \tau_i + \epsilon_{ij}, \hspace{8} i = 1, ..., n, j = 1, ..., k \\
+\tau_i & \sim N(T, \psi^2) \\
+\epsilon_{ij} & \sim N(0, 2\sigma^2)
+\end{align*} 
+
+\noindent where \textit{i} indexes the patient and \textit{j} the cycle. \(\epsilon_{ij}\) are random within-patient within-cycle disturbance terms. \(\tau_1\, ..., \tau_n\) are the random treatment effects with mean \textit{T} and variance \(\psi^2\). \par
+
+Linear mixed models will be fitted using lme4 (\cite{lme4}). The unknown parameters in this model are the variance of the treatment effect ($\psi^2$), the within-patient within-cycle variance ($\sigma^2$) and the average treatment effect (\textit{T}). See table 1 for an overview of the parameters in the simulation. \par
+
+The initial sample size (\textit{n}) will be calculated as the sample size required to achieve 80\% power under the hypothesized parameter values $\psi^2$, $\sigma^2$, the clinically relevant treatment effect ($\Delta$) and a two-sided significance level of 5\%. Sample size will be re-evaluated after \textit{fn} subjects using the observed estimates for $\psi^2$ and $\sigma^2$. 
+
+\begin{table}[h]
+\begin{center}
+\caption{Parameters in the simulation study}
+\begin{tabular}{p{6cm}p{4cm}p{4cm}}
+\hline
+Description & Constant parameters & Varied parameters \\
+\hline 
+\textbf{Design parameters} & & \\
+Fraction of initial sample size & & $f = 0.25, 0.5, 0.75$ \\
+Cycles per patient & $k = 3$ & \\
+Power & $1 - \beta = 0.8$ & \\
+Two-sided significance level & $\alpha = 0.05$ & \\
+Clinically relevant difference & $\Delta = 1$ & \\
+\textbf{Model parameters} & & \\
+Within-patient within-cycle variance & & $\sigma^2 = 0.25, 0.5, 1$ \\
+Variance of treatment effect & & $\psi^2 = 0.5, 1, 2$ \\
+Average treatment effect & $T = \Delta = 1$ & \\
+\textbf{Simulation parameter} & & \\
+Number of simulations & $N = 10000$ & \\
+\hline 
+\multicolumn{3}{l}{\textbf{Outcome parameters}} \\
+Statistical power & \multicolumn{2}{p{8cm}}{Compare power of trial with sample size re-estimation in simulation to target of 80\%}\\
+Sample size & \multicolumn{2}{p{8cm}}{Compare sample size under re-estimation with sample size under true parameter values} \\
+\hline 
+\end{tabular}
+\label{tab:T1}
+\end{center}
+\end{table}
+
+
+\newpage
+\nocite{*}
+\printbibliography
+\noindent * \textit{Notice that the references with a boldface title are mentioned in the body of the text. The remaining references concern other relevant material that may be useful for the thesis.}
+
+\end{document}

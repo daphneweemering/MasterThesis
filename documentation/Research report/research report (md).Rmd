@@ -1,7 +1,6 @@
 ---
-title: "Research report"
-author: "Daphne Weemering"
-date: "1/4/2022"
+title: " "
+fontsize: 11pt
 header-includes:
    - \usepackage{pdflscape}
    - \usepackage{booktabs}
@@ -12,6 +11,42 @@ bibliography: "reference.bib"
 csl: "ama.csl"
 ---
 
+\begin{titlepage}
+\begin{center}
+
+\vspace*{0.01cm}
+RESEARCH REPORT \\
+
+\vspace{2cm}
+\Large
+\textbf{Interim sample size reestimation for adequately powered series of \textit{N}-of-1 trials} \\
+
+\vspace{2cm}
+\large
+{Daphne Weemering (3239480)} \\
+
+\vspace{0.3cm}
+\large
+\textit{Methodology and Statistics for the Behavioral, Biomedical and Social Sciences} \\
+\vspace{0.3cm}
+Utrecht University \\
+
+\vspace{1cm}
+\large
+Supervisor: Dr. Peter van de Ven  \\
+
+\vspace{0.3cm}
+UMC Utrecht 
+
+\vspace{2cm}
+\large 
+\today \\
+
+\vspace{6cm}
+Word count: 2446
+
+\end{center}
+\end{titlepage}
 
 \newpage
 # Introduction

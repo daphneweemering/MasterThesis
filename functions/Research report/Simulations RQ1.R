@@ -8,11 +8,15 @@ library(lmerTest)
 # 1. ---------------------------------------------------------------------------
 ################################################################################
 #### Function to calculate the initial sample size under hypothesized \psi^2 and 
-#### \sigma^2 ####
+#### \sigma^2 ##################################################################
 
-initsampsize <- function(var_treatment, var_error, fn, n_cycles = 3){
+initsampsize <- function(x, n_cycles = 3){
   
-  # Calculate the variance of the average treatment effect 
+  var_error <- x[1]
+  var_treatment <- x[2]
+  fn <- x[3]
+  
+  # Calculate the standard deviation of the average treatment effect 
   sd_avg_treatment <- sqrt(var_treatment + (2*var_error)/n_cycles)
   
   # Calculate the corresponding sample size plugging in the standard deviation
@@ -26,18 +30,22 @@ initsampsize <- function(var_treatment, var_error, fn, n_cycles = 3){
   # observing this fraction, sample size reestimation is performed
   sampsizefrac <- ceiling(fn*init_n_size)
   
-  # Return the standard deviation of the average treatment effect (used to calculate
-  # the sample size) and the sample size itself
-  return(list(sd_avg_treatment, init_n_size, sampsizefrac))
+  # Return the initial sample size under hypothesized parameter values and return
+  # the fraction of the initial sample size on which reestimation will be performed
+  return(list(init_n_size, sampsizefrac))
 }
 
 
 # 2. ---------------------------------------------------------------------------
 ################################################################################
-#### Function to run the model for different parameter settings #### 
+#### Function to estimate the parameters and to calculate the final necessary
+#### sample size ###############################################################
 
-before_reestim <- function(n_patients, true_var_treatment, true_var_error, N, 
-                           avg_treatment = 1, n_cycles = 3, seed = 3239480){
+finsampsize <- function(y, N = 1000, avg_treatment = 1, n_cycles = 3, seed = 3239480){
+  
+  true_var_error <- y[1]
+  true_var_treatment <- y[2]
+  n_patients <- y[3]
   
   # Set a seed for reproducibility
   set.seed(seed)
@@ -89,6 +97,11 @@ before_reestim <- function(n_patients, true_var_treatment, true_var_error, N,
   # Make storage for the significant fixed effects
   sig <- matrix(data = NA, nrow = N, ncol = 1)
   
+  # Make some storage for the sd of the average treatment effect and the final
+  # sample size
+  sd2 <- matrix(data = NA, nrow = N, ncol = 1)
+  final_n_size <- matrix(data = NA, nrow = N, ncol = 1)
+  
   # For each simulation, estimate the mean treatment effect and store
   for (i in 1:N){
     out <- lmer(formula = d_ij[,i] ~ 1 + (1 | patient), data = dat)
@@ -105,46 +118,27 @@ before_reestim <- function(n_patients, true_var_treatment, true_var_error, N,
     # Indicate which estimates are significantly different from zero 
     sig[i,] <- ifelse(estim[i,2] < 1.96, 0, 1)
     
+    # Calculate the power (at interim for now)
     pwr <- sum(sig[,1] / N)
-  }
-  
-  # Let the function return the dataframe of the estimated parameters and the 
-  # estimated power
-  estim <<- estim
-  return(pwr)
-}
-
-
-# 3. ---------------------------------------------------------------------------
-################################################################################
-#### A function to recalculate the sample size with the interim estimates of \psi^2 
-#### and \sigma^2. PLug in the dataframe 'estim' from the function 
-#### 'before_reestim'. ####
-
-finalsampsize <- function(estim, N, n_cycles = 3){
-  
-  ## First, we can plug in the interim estimates of \psi^2 and \sigma^2 into the 
-  ## sample size calculation
-  
-  # Make some storage for the sd of the average treatment effect and the final
-  # sample size
-  sd_avg_treatment <- matrix(data = NA, nrow = N, ncol = 1)
-  final_n_size <- matrix(data = NA, nrow = N, ncol = 1)
-  
-  for (i in 1:N){
-    # Calculate the variance of the average treatment effect 
-    sd_avg_treatment[i,] <- sqrt(estim[i,3]^2 + (estim[i,4]^2)/n_cycles)
     
-    # Calculate the corresponding sample size necessary
-    pwrcalc <- pwr.t.test(d = 1/sd_avg_treatment[i,], power = 0.8, sig.level = 0.05, 
-                          type = "paired", alternative = "two.sided")
+    # Calculate the standard deviation of the average treatment effect 
+    sd2[i,] <- sqrt(estim[i,3]^2 + (estim[i,4]^2)/n_cycles)
+    
+    # Calculate the final sample size necessary
+    pwrcalculation <- pwr.t.test(d = 1/sd2[i,], power = 0.8, sig.level = 0.05, 
+                                 type = "paired", alternative = "two.sided")
     
     # Extract the sample size from 'pwrcalc'
-    final_n_size[i,] <- pwrcalc$n
+    final_n_size[i,] <- pwrcalculation$n
   }
   
-  # Return the whole 'final_n_size' dataframe (needed for next function)
-  final_n_size <<- final_n_size
+  # Get the mean of the simulated final sample sizes 
+  mnfin_n_size <- mean(final_n_size)
+  
+  # Let the function return the final sample size
+  return(mnfin_n_size)
 }
+
+
 
 

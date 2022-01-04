@@ -1,4 +1,4 @@
-# Simulation thesis: 'Interim sample size reestimation for adequately powered
+# 'Interim sample size reestimation for adequately powered
 # series of N-of-1 trials' 
 
 library(lme4)

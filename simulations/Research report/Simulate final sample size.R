@@ -30,7 +30,7 @@ initial <- apply(x, 1, initsampsize)
 numberofpatients <- matrix(unlist(initial), nrow = 2, ncol = 27)
 
 # Seperate the number of patients in three separate data frames: one where fn is 
-# 0.25, one where fn is 0.5 and one where fn = 0.75 (for the sake of interpretability)
+# 0.25, one where fn is 0.5 and one where fn = 0.75 
 fn25 <- t(numberofpatients[1:2,1:9])
 fn50 <- t(numberofpatients[1:2,10:18])
 fn75 <- t(numberofpatients[1:2,19:27])

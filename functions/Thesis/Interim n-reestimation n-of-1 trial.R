@@ -9,7 +9,7 @@ library(lmerTest)
 ################################################################################
 
 reestim <- function(hvar_treatment, hvar_error, tvar_treatment, tvar_error, fn, 
-                    n_cycles = 3, avg_treatment = 1, N = 10, seed = 3239480){
+                    n_cycles = 3, avg_treatment = 1, N = 100, seed = 3239480){
   
   # Set a seed for reproducibility
   set.seed(seed)
@@ -144,7 +144,7 @@ reestim <- function(hvar_treatment, hvar_error, tvar_treatment, tvar_error, fn,
   # Estimate the mean treatment effect and store
   out2 <- lmer(formula = d_ij_full ~ 1 + (1 | patient), data = dat2)
   
-  # Extract the fixed effects and their t-value
+  # Extract the fixed effects and the t-value
   estimfinal[,1] <- summary(out2)$coefficients[1,1]
   estimfinal[,2] <- summary(out2)$coefficients[1,4]
   
@@ -153,25 +153,24 @@ reestim <- function(hvar_treatment, hvar_error, tvar_treatment, tvar_error, fn,
   estimfinal[,3] <- temp[1,5]
   estimfinal[,4] <- temp[2,5]
   
-  # Make storage for the final output
-  #output <- matrix(data = NA, nrow = N, ncol = 3)
-  
   # Specify that sampsizefrac and sampsizefinal come in the first two columns of
   # the output matrix
   output[i,1] <- sampsizefrac
   output[i,2] <- sampsizefinal
   
-  # Indicate all the significant results with a 1 and nonsignificant results with 
+  # Indicate all the significant results with a 1 and non-significant results with 
   # a 0
   output[i,3] <- ifelse(estimfinal[,2] < 1.96, 0, 1)
   }
   
   # Calculate the total power
-  pwr <- sum(output[,3] / N)
+  pwr <- sum(output[,3]/N)
   
-  return(pwr)
+  pwr <<- pwr 
   output <<- output
+  estimfinal <<- estimfinal
 }
 
 
 
+reestim(0.5, 0.25, 0.5, 0.25, 0.5)

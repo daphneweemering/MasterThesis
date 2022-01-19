@@ -14,6 +14,10 @@ reestim <- function(hvar_treatment, hvar_error, tvar_treatment, tvar_error, fn,
   # Set a seed for reproducibility
   set.seed(seed)
   
+  # Make storage for the final output
+  output <- matrix(data = NA, nrow = N, ncol = 3)
+  
+  for (i in 1:N){
   # ----------------------------------------------------------------------------
   # 1. Calculate the initial sample size based on hypothesized values for \psi^2
   #    and \sigma^2
@@ -149,9 +153,24 @@ reestim <- function(hvar_treatment, hvar_error, tvar_treatment, tvar_error, fn,
   estimfinal[,3] <- temp[1,5]
   estimfinal[,4] <- temp[2,5]
   
-  estimfinal <<- estimfinal
-  dat2 <<- dat2 
+  # Make storage for the final output
+  #output <- matrix(data = NA, nrow = N, ncol = 3)
   
+  # Specify that sampsizefrac and sampsizefinal come in the first two columns of
+  # the output matrix
+  output[i,1] <- sampsizefrac
+  output[i,2] <- sampsizefinal
+  
+  # Indicate all the significant results with a 1 and nonsignificant results with 
+  # a 0
+  output[i,3] <- ifelse(estimfinal[,2] < 1.96, 0, 1)
+  }
+  
+  # Calculate the total power
+  pwr <- sum(output[,3] / N)
+  
+  return(pwr)
+  output <<- output
 }
 
 

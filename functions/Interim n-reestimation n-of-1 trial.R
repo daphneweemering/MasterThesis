@@ -7,8 +7,14 @@ library(lmerTest)
 # ------------------------------------------------------------------------------
 ################################################################################
 
-reestim <- function(hvar_treatment, hvar_error, tvar_treatment, tvar_error, fn, 
-                    n_cycles = 3, avg_treatment = 1, N = 2000, seed = 3239480){
+reestim <- function(x, n_cycles = 3, avg_treatment = 1, N = 5000, seed = 3239480){
+  
+  # Specify which value from list x is what
+  hvar_treatment <- x[1]
+  hvar_error <- x[2]
+  tvar_treatment <- x[3]
+  tvar_error <- x[4]
+  fn <- x[5]
   
   # Set a seed for reproducibility
   set.seed(seed)

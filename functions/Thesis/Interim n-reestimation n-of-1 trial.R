@@ -25,7 +25,7 @@ reestim <- function(hvar_treatment, hvar_error, tvar_treatment, tvar_error, fn,
   sd_avg_treatment <- sqrt(hvar_treatment + (2*hvar_error)/n_cycles)
   
   # Calculate the corresponding sample size plugging in the standard deviation
-  pwrcalc <- pwr.t.test(d = 1/sd_avg_treatment, power = 0.8, sig.level = 0.05, 
+  pwrcalc <- pwr.t.test(d = avg_treatment/sd_avg_treatment, power = 0.8, sig.level = 0.05, 
                         type = "paired", alternative = "two.sided")
   
   # Extract the sample size from 'pwrcalc'
@@ -90,7 +90,7 @@ reestim <- function(hvar_treatment, hvar_error, tvar_treatment, tvar_error, fn,
   sd_avg_treatment2 <- sqrt(estim[,3]^2 + (estim[,4]^2)/n_cycles)
   
   # Calculate the final sample size necessary
-  pwrcalc2 <- pwr.t.test(d = 1/sd_avg_treatment2, power = 0.8, sig.level = 0.05, 
+  pwrcalc2 <- pwr.t.test(d = avg_treatment/sd_avg_treatment2, power = 0.8, sig.level = 0.05, 
                          type = "paired", alternative = "two.sided")
   
   # Extract the sample size from 'pwrcalc'

@@ -1,5 +1,0 @@
-## Simulations 
-
-This folder contains the simulations that are ran. The folder for the research report includes the calculation of the initial sample size under hypothesized values for \sigma ^2 and \psi^2. Then, a fraction (0.25, 0.50 or 0.75) of the intial sample size is taken to estimate the parameters. Interim results of these parameters (interim because only a fraction of the total calculated sample size is used) are then used to reestimate the sample size. This is done multiple times for the same parameter settings, and the mean of all these simulations is used as the final sample size under reestimation. 
-
-The functions necessary for running the simulations that are executed and documented in this folder are to be found in the folder 'functions'. 

@@ -82,7 +82,7 @@ d_{ij} &= \tau_i + \epsilon_{ij},    i=1,...,n, j=1,...k \\
 $$
 
 
-Let *n* denote the patient and *k* the number of cycles within each patient. Then *i* indexes the patient and *j* the cycle. $d_{ij}$ is the observed treatment difference for patient *i* in cycle *j*. $\tau_1,...,\tau_n$ are the random treatment effects with an assumed mean *T* and variance \(\psi^2\). $\epsilon_{ij}$ are random within-patient within-cycle disturbance terms. 
+Let *n* denote the patient and *k* the number of cycles within each patient. Then *i* indexes the patient and *j* the cycle. $d_{ij}$ is the observed treatment difference for patient *i* in cycle *j*. $\tau_1,...,\tau_n$ are the random treatment effects with an assumed mean *T* and variance $\psi^2$. $\epsilon_{ij}$ are random within-patient within-cycle disturbance terms. 
 
 ## Sample size calculations in N-of-1 trials 
 Following the model given in equation equation 1, the average treatment effect in the population and the corresponding variance could be derived [@senn2019]. Senn [@senn2019] has made use of the fact that the summary measures approach offers the same results as linear mixed models for balanced data [@sennetal2000]. Therefore, the trial data is reduced to an average treatment effect for each patient:  

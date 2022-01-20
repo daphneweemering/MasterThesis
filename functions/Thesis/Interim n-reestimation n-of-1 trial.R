@@ -1,5 +1,4 @@
-# 'Interim sample size reestimation for adequately powered
-# series of N-of-1 trials' 
+# 'Interim sample size reestimation for adequately powered series of N-of-1 trials' 
 
 library(lme4)
 library(pwr)
@@ -9,7 +8,7 @@ library(lmerTest)
 ################################################################################
 
 reestim <- function(hvar_treatment, hvar_error, tvar_treatment, tvar_error, fn, 
-                    n_cycles = 3, avg_treatment = 1, N = 100, seed = 3239480){
+                    n_cycles = 3, avg_treatment = 1, N = 2000, seed = 3239480){
   
   # Set a seed for reproducibility
   set.seed(seed)
@@ -103,6 +102,17 @@ reestim <- function(hvar_treatment, hvar_error, tvar_treatment, tvar_error, fn,
   # Subtract the observed number of patients from the final sample size 
   sampsizeremain <- sampsizefinal - sampsizefrac
   
+  # If the remaining sample size is zero or negative store results and stop. If 
+  # remaining sample size is larger than zero, observe remaining number of subjects
+  if (sampsizeremain <= 0){
+    output[i,1] <- sampsizefrac
+    output[i,2] <- sampsizefinal
+    
+    # Indicate all the significant results with a 1 and non-significant results with 
+    # a 0
+    output[i,3] <- ifelse(estim[,2] < 1.96, 0, 1)
+  } else{
+  
   # Make storage for the simulated values of the variance of the treatment effect 
   # and the variance of the random error for the remaining number of patients
   treatment_effect2 <- matrix(data = NA, nrow = 1, ncol = sampsizeremain)
@@ -162,10 +172,12 @@ reestim <- function(hvar_treatment, hvar_error, tvar_treatment, tvar_error, fn,
   # a 0
   output[i,3] <- ifelse(estimfinal[,2] < 1.96, 0, 1)
   }
+  }
   
   # Calculate the total power
   pwr <- sum(output[,3]/N)
   
+  # Output
   pwr <<- pwr 
   output <<- output
   estimfinal <<- estimfinal
@@ -173,4 +185,4 @@ reestim <- function(hvar_treatment, hvar_error, tvar_treatment, tvar_error, fn,
 
 
 
-reestim(0.5, 0.25, 0.5, 0.25, 0.5)
+reestim(0.5, 0.25, 2, 1, 0.5)

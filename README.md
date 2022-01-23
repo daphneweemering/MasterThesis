@@ -32,4 +32,4 @@ The repository contains the following folders:
 - Simulations: This folder contains the file that runs the simulation under different parameter settings (different values for the hypothesized and true values of the residual and the random treatment effect). This file runs the simulations for the research report, where the functions from the file 'Initial and final sample size functions.R' are used to calculate the initial sample size and final sample size (the sample size after interim reestimation of the sample size). For this project I ran simulations where the hypothesized and true random treatment effect are c(0.5, 1, 2), where the hypothesized and true residuals are c(0.25, 0.5, 1), and where the fractions of the initial sample size are c(0.25, 0.5, 0.75). 
 
 
-This project is ongoing and new folders and files will eventually be added to this repository!  the value for the hypothesized residual
+This project is ongoing and new folders and files will eventually be added to this repository! 

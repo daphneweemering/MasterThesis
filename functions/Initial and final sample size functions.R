@@ -12,6 +12,7 @@ library(lmerTest)
 
 initsampsize <- function(x, n_cycles = 3){
   
+  # Specify which part of x is what 
   var_error <- x[1]
   var_treatment <- x[2]
   fn <- x[3]
@@ -26,8 +27,8 @@ initsampsize <- function(x, n_cycles = 3){
   # Extract the sample size from 'pwrcalc'
   init_n_size <- pwrcalc$n
   
-  # Calculate the fraction (c(0.25, 0.5, 0.75)) of the initial sample size. After
-  # observing this fraction, sample size reestimation is performed
+  # Calculate the fraction of the initial sample size. After observing this fraction, 
+  # sample size reestimation is performed
   sampsizefrac <- ceiling(fn*init_n_size)
   
   # Return the initial sample size under hypothesized parameter values and return
@@ -43,6 +44,7 @@ initsampsize <- function(x, n_cycles = 3){
 
 finsampsize <- function(y, N = 1000, avg_treatment = 1, n_cycles = 3, seed = 3239480){
   
+  # Specify which part of y is what 
   true_var_error <- y[1]
   true_var_treatment <- y[2]
   n_patients <- y[3]
@@ -50,7 +52,7 @@ finsampsize <- function(y, N = 1000, avg_treatment = 1, n_cycles = 3, seed = 323
   # Set a seed for reproducibility
   set.seed(seed)
   
-  # Create a dataframe including patients and cycles
+  # Create a dataframe including patients, cycles and an index 
   dat = data.frame(patient   = factor(sort(rep((1:n_patients), n_cycles))),
                    cycle     = factor(rep(sort(rep(1:n_cycles)), n_patients)),
                    index     = factor(rep(c(1:(n_cycles)), n_patients)))
@@ -60,10 +62,10 @@ finsampsize <- function(y, N = 1000, avg_treatment = 1, n_cycles = 3, seed = 323
   treatment_effect <- matrix(data = NA, nrow = n_patients, ncol = N)
   random_error <- matrix(data = NA, nrow = n_patients*n_cycles, ncol = N)
   
-  # Make storage for the simulated value of the outcome (difference between 
-  # treatment A and treatment B; d_ij)
+  # Make storage for the simulated value of the outcome 
   d_ij <- matrix(data = NA, nrow = n_patients*n_cycles, ncol = N)
   
+  # Loop through N iterations
   for(i in 1:N){
     # Simulate values for the treatment effect and the random error
     treatment_effect[,i] <- rnorm(n = n_patients, mean = avg_treatment, sd = sqrt(true_var_treatment))
@@ -106,11 +108,11 @@ finsampsize <- function(y, N = 1000, avg_treatment = 1, n_cycles = 3, seed = 323
   for (i in 1:N){
     out <- lmer(formula = d_ij[,i] ~ 1 + (1 | patient), data = dat)
     
-    # Extract the fixed effects and their t-value
+    # Extract the fixed effects and their t-value (respectively)
     estim[i,1] <- summary(out)$coefficients[1,1]
     estim[i,2] <- summary(out)$coefficients[1,4]
     
-    # Extract the sd of the random intercept and the residual
+    # Extract the sd of the random intercept and the residual (respectively)
     temp <- as.data.frame(VarCorr(out))
     estim[i,3] <- temp[1,5]
     estim[i,4] <- temp[2,5]

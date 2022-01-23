@@ -1,5 +1,6 @@
 # 'Interim sample size reestimation for adequately powered series of N-of-1 trials' 
 
+# Load the required libraries
 library(lme4)
 library(pwr)
 library(lmerTest)
@@ -7,6 +8,12 @@ library(lmerTest)
 # ------------------------------------------------------------------------------
 ################################################################################
 
+# A function that runs through the whole sample size reestimation process. It 
+# starts with calculating the initial sample size based on hypothesized parameter
+# values. Then, a part of the subjects are observed and parameters are estimated. Based
+# on these interim estimates, the sample size is recalculated and the remaining 
+# subjects are observed and the parameters are again estimated. This process is
+# iterated N times and after looping through N iterations, power is calculated. 
 reestim <- function(x, n_cycles = 3, avg_treatment = 1, N = 5000, seed = 3239480){
   
   # Specify which value from list x is what
@@ -47,7 +54,7 @@ reestim <- function(x, n_cycles = 3, avg_treatment = 1, N = 5000, seed = 3239480
   #    parameters at interim and base final sample size on interim estimates of 
   #    \psi^2 and \sigma^2
   
-  # Create a dataframe including patients and cycles
+  # Create a dataframe including patients, cycles and an index
   dat = data.frame(patient   = factor(sort(rep((1:sampsizefrac), n_cycles))),
                    cycle     = factor(rep(sort(rep(1:n_cycles)), sampsizefrac)),
                    index     = factor(rep(c(1:(n_cycles)), sampsizefrac)))
@@ -57,8 +64,7 @@ reestim <- function(x, n_cycles = 3, avg_treatment = 1, N = 5000, seed = 3239480
   treatment_effect <- matrix(data = NA, nrow = 1, ncol = sampsizefrac)
   random_error <- matrix(data = NA, nrow = 1, ncol = sampsizefrac*n_cycles)
   
-  # Make storage for the simulated value of the outcome (difference between 
-  # treatment A and treatment B; d_ij)
+  # Make storage for the simulated value of the outcome 
   d_ij <- matrix(data = NA, nrow = 1, ncol = sampsizefrac*n_cycles)
   
   # First, simulate values for \psi^2 and \sigma^2
@@ -83,11 +89,11 @@ reestim <- function(x, n_cycles = 3, avg_treatment = 1, N = 5000, seed = 3239480
   # Estimate the mean treatment effect and store
   out <- lmer(formula = d_ij ~ 1 + (1 | patient), data = dat)
   
-  # Extract the fixed effects and their t-value
+  # Extract the fixed effects and their t-value (respectively)
   estim[,1] <- summary(out)$coefficients[1,1]
   estim[,2] <- summary(out)$coefficients[1,4]
   
-  # Extract the sd of the random intercept and the residual
+  # Extract the sd of the random intercept and the residual (respectively)
   temp <- as.data.frame(VarCorr(out))
   estim[,3] <- temp[1,5]
   estim[,4] <- temp[2,5]
@@ -124,25 +130,27 @@ reestim <- function(x, n_cycles = 3, avg_treatment = 1, N = 5000, seed = 3239480
   treatment_effect2 <- matrix(data = NA, nrow = 1, ncol = sampsizeremain)
   random_error2 <- matrix(data = NA, nrow = 1, ncol = sampsizeremain*n_cycles)
   
-  # Make storage for the simulated value of the outcome (difference between 
-  # treatment A and treatment B; d_ij) for the remaining number of patients
+  # Make storage for the simulated value of the outcome for the remaining number 
+  # of patients
   d_ij2 <- matrix(data = NA, nrow = 1, ncol = sampsizeremain*n_cycles)
   
-  # First, simulate values for \psi^2 and \sigma^2
+  # First, simulate values for \psi^2 and \sigma^2 (variance of treatment effect 
+  # and variance of the random error)
   treatment_effect2 <- as.data.frame(rnorm(n = sampsizeremain, mean = avg_treatment, sd = sqrt(tvar_treatment)))
   random_error2 <- as.data.frame(rnorm(n = sampsizeremain*n_cycles, mean = 0, sd = sqrt(2*tvar_error)))
   
   # Duplicate the values for the treatment effect for each cycle 
   treatment_effect2 <- (sapply(treatment_effect2, rep, each = 3))
   
-  # Simulate values for the outcome d_ij2 
+  # Simulate values for the outcome  
   d_ij2 <- as.data.frame(treatment_effect2 + random_error2)
   colnames(d_ij2)[1] <- 'd_ij'
   
   # Combine the outcome of the first and the second half of the patients
   outcome <- rbind(d_ij, d_ij2)
   
-  # Make a dataframe for the final total sample size
+  # Make a dataframe for the final total sample size with patients number, cycle
+  # number and an index
   dat2 <- data.frame(patient   = factor(sort(rep((1:sampsizefinal), n_cycles))),
                      cycle     = factor(rep(sort(rep(1:n_cycles)), sampsizefinal)),
                      index     = factor(rep(c(1:(n_cycles)), sampsizefinal)))
@@ -160,11 +168,11 @@ reestim <- function(x, n_cycles = 3, avg_treatment = 1, N = 5000, seed = 3239480
   # Estimate the mean treatment effect and store
   out2 <- lmer(formula = d_ij_full ~ 1 + (1 | patient), data = dat2)
   
-  # Extract the fixed effects and the t-value
+  # Extract the fixed effects and the t-value (respectively)
   estimfinal[,1] <- summary(out2)$coefficients[1,1]
   estimfinal[,2] <- summary(out2)$coefficients[1,4]
   
-  # Extract the sd of the random intercept and the residual
+  # Extract the sd of the random intercept and the residual (respectively)
   temp <- as.data.frame(VarCorr(out2))
   estimfinal[,3] <- temp[1,5]
   estimfinal[,4] <- temp[2,5]
@@ -190,5 +198,3 @@ reestim <- function(x, n_cycles = 3, avg_treatment = 1, N = 5000, seed = 3239480
 }
 
 
-
-reestim(0.5, 0.25, 2, 1, 0.5)

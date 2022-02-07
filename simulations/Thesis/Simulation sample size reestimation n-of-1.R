@@ -18,6 +18,9 @@ fn <- c(0.25, 0.5, 0.75)
 # fn
 x <- expand.grid(hvar_treatment, hvar_error, tvar_treatment, tvar_error, fn)
 
+# Make storage
+#initial <- matrix(data = NA, nrow = 4, ncol = 243)
+
 # Use apply to calculate the initial sample size for every combination of 
 # hypothesized \sigma^2 and \psi^2 and the fraction of the sample size (fn)
 initial <- apply(x, 1, reestim)

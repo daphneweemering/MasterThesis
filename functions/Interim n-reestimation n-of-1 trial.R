@@ -14,7 +14,7 @@ library(lmerTest)
 # on these interim estimates, the sample size is recalculated and the remaining 
 # subjects are observed and the parameters are again estimated. This process is
 # iterated N times and after looping through N iterations, power is calculated. 
-reestim <- function(x, n_cycles = 3, avg_treatment = 1, N = 10, seed = 3239480){
+reestim <- function(x, n_cycles = 3, avg_treatment = 1, N = 5000, seed = 3239480){
   
   # Specify which value from list x is what
   hvar_treatment <- x[1]
@@ -192,9 +192,9 @@ reestim <- function(x, n_cycles = 3, avg_treatment = 1, N = 10, seed = 3239480){
   pwr <- sum(output[,3]/N)
   
   # Output
-  pwr <<- pwr 
-  output <<- output
+  output <<- output 
   estimfinal <<- estimfinal
+  return(pwr)
 }
 
 

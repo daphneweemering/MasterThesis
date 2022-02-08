@@ -1,7 +1,0 @@
----
-title: "Thesis"
-author: "Daphne Weemering"
-date: "2/8/2022"
-output: pdf_document
----
-

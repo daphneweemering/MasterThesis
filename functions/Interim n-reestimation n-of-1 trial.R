@@ -14,7 +14,7 @@ library(lmerTest)
 # on these interim estimates, the sample size is recalculated and the remaining 
 # subjects are observed and the parameters are again estimated. This process is
 # iterated N times and after looping through N iterations, power is calculated. 
-reestim <- function(x, n_cycles = 3, avg_treatment = 1, N = 5000, seed = 3239480){
+reestim <- function(x, n_cycles = 3, avg_treatment = 1, N = 10, seed = 3239480){
   
   # Specify which value from list x is what
   hvar_treatment <- x[1]
@@ -37,9 +37,17 @@ reestim <- function(x, n_cycles = 3, avg_treatment = 1, N = 5000, seed = 3239480
   # Calculate the standard deviation of the average treatment effect 
   sd_avg_treatment <- sqrt(hvar_treatment + (2*hvar_error)/n_cycles)
   
-  # Calculate the corresponding sample size plugging in the standard deviation
-  pwrcalc <- pwr.t.test(d = avg_treatment/sd_avg_treatment, power = 0.8, sig.level = 0.05, 
-                        type = "paired", alternative = "two.sided")
+  # If effect size is larger than 10, it's set to ten in order to avoid the sample
+  # size to become too small. Otherwise the calculated effect size is used
+  if(avg_treatment/sd_avg_treatment > 10){
+    # Calculate the corresponding sample size plugging in the standard deviation
+    pwrcalc <- pwr.t.test(d = 10, power = 0.8, sig.level = 0.05, 
+                          type = "one.sample", alternative = "two.sided")
+  } else{
+    # Calculate the corresponding sample size plugging in the standard deviation
+    pwrcalc <- pwr.t.test(d = avg_treatment/sd_avg_treatment, power = 0.8, 
+                          sig.level = 0.05, type = "one.sample", alternative = "two.sided")
+  }
   
   # Extract the sample size from 'pwrcalc'
   sampsizehyp <- pwrcalc$n
@@ -101,9 +109,17 @@ reestim <- function(x, n_cycles = 3, avg_treatment = 1, N = 5000, seed = 3239480
   # Calculate the standard deviation of the average treatment effect 
   sd_avg_treatment2 <- sqrt(estim[,3]^2 + (estim[,4]^2)/n_cycles)
   
-  # Calculate the final sample size necessary
-  pwrcalc2 <- pwr.t.test(d = avg_treatment/sd_avg_treatment2, power = 0.8, sig.level = 0.05, 
-                         type = "paired", alternative = "two.sided")
+  # If effect size is larger than 10, it's set to ten in order to avoid the sample
+  # size to become too small. Otherwise the calculated effect size is used
+  if(avg_treatment/sd_avg_treatment2 > 10){
+    # Calculate the corresponding sample size plugging in the standard deviation
+    pwrcalc2 <- pwr.t.test(d = 10, power = 0.8, sig.level = 0.05, 
+                          type = "one.sample", alternative = "two.sided")
+  } else{
+    # Calculate the corresponding sample size plugging in the standard deviation
+    pwrcalc2 <- pwr.t.test(d = avg_treatment/sd_avg_treatment2, power = 0.8, 
+                          sig.level = 0.05, type = "one.sample", alternative = "two.sided")
+  }
   
   # Extract the sample size from 'pwrcalc'
   sampsizefinal <- pwrcalc2$n
@@ -180,7 +196,7 @@ reestim <- function(x, n_cycles = 3, avg_treatment = 1, N = 5000, seed = 3239480
   # Specify that sampsizefrac and sampsizefinal come in the first two columns of
   # the output matrix
   output[i,1] <- sampsizefrac
-  output[i,2] <- sampsizefinal
+  output[i,2] <- sampsizefinal 
   
   # Indicate all the significant results with a 1 and non-significant results with 
   # a 0
@@ -191,10 +207,14 @@ reestim <- function(x, n_cycles = 3, avg_treatment = 1, N = 5000, seed = 3239480
   # Calculate the total power
   pwr <- sum(output[,3]/N)
   
+  # Calculate the mean sample sizes
+  initialsampsize <- mean(sampsizehyp)
+  initialsampsize2 <- mean(sampsizefrac)
+  finalsampsize <- mean(sampsizefinal)
+  remainingsampsize <- mean(sampsizeremain)
+  
   # Output
-  output <<- output 
-  estimfinal <<- estimfinal
-  return(pwr)
+  return(list(pwr, initialsampsize, initialsampsize2, finalsampsize, remainingsampsize))
 }
 
 

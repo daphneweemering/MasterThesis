@@ -14,7 +14,8 @@ library(lmerTest)
 # on these interim estimates, the sample size is recalculated and the remaining 
 # subjects are observed and the parameters are again estimated. This process is
 # iterated N times and after looping through N iterations, power is calculated. 
-reestim <- function(x, n_cycles = 3, avg_treatment = 1, N = 10000, seed = 3239480){
+reestim <- function(x, n_cycles = 3, avg_treatment_sampsize = 1, avg_treatment_data = 0,
+                    N = 10000, seed = 3239480){
   
   # Specify which value from list x is what
   hvar_treatment <- x[1]
@@ -39,13 +40,13 @@ reestim <- function(x, n_cycles = 3, avg_treatment = 1, N = 10000, seed = 323948
   
   # If effect size is larger than 10, it's set to ten in order to avoid the sample
   # size to become too small. Otherwise the calculated effect size is used
-  if(avg_treatment/sd_avg_treatment > 10){
+  if(avg_treatment_sampsize/sd_avg_treatment > 10){
     # Calculate the corresponding sample size plugging in the standard deviation
     pwrcalc <- pwr.t.test(d = 10, power = 0.8, sig.level = 0.05, 
                           type = "one.sample", alternative = "two.sided")
   } else{
     # Calculate the corresponding sample size plugging in the standard deviation
-    pwrcalc <- pwr.t.test(d = avg_treatment/sd_avg_treatment, power = 0.8, 
+    pwrcalc <- pwr.t.test(d = avg_treatment_sampsize/sd_avg_treatment, power = 0.8, 
                           sig.level = 0.05, type = "one.sample", alternative = "two.sided")
   }
   
@@ -76,7 +77,7 @@ reestim <- function(x, n_cycles = 3, avg_treatment = 1, N = 10000, seed = 323948
   d_ij <- matrix(data = NA, nrow = 1, ncol = sampsizefrac*n_cycles)
   
   # First, simulate values for \psi^2 and \sigma^2
-  treatment_effect <- as.data.frame(rnorm(n = sampsizefrac, mean = avg_treatment, sd = sqrt(tvar_treatment)))
+  treatment_effect <- as.data.frame(rnorm(n = sampsizefrac, mean = avg_treatment_data, sd = sqrt(tvar_treatment)))
   random_error <- as.data.frame(rnorm(n = sampsizefrac*n_cycles, mean = 0, sd = sqrt(2*tvar_error)))
   
   # Duplicate the values for the treatment effect for each cycle 
@@ -111,13 +112,13 @@ reestim <- function(x, n_cycles = 3, avg_treatment = 1, N = 10000, seed = 323948
   
   # If effect size is larger than 10, it's set to ten in order to avoid the sample
   # size to become too small. Otherwise the calculated effect size is used
-  if(avg_treatment/sd_avg_treatment2 > 10){
+  if(avg_treatment_sampsize/sd_avg_treatment2 > 10){
     # Calculate the corresponding sample size plugging in the standard deviation
     pwrcalc2 <- pwr.t.test(d = 10, power = 0.8, sig.level = 0.05, 
                           type = "one.sample", alternative = "two.sided")
   } else{
     # Calculate the corresponding sample size plugging in the standard deviation
-    pwrcalc2 <- pwr.t.test(d = avg_treatment/sd_avg_treatment2, power = 0.8, 
+    pwrcalc2 <- pwr.t.test(d = avg_treatment_sampsize/sd_avg_treatment2, power = 0.8, 
                           sig.level = 0.05, type = "one.sample", alternative = "two.sided")
   }
   
@@ -152,7 +153,7 @@ reestim <- function(x, n_cycles = 3, avg_treatment = 1, N = 10000, seed = 323948
   
   # First, simulate values for \psi^2 and \sigma^2 (variance of treatment effect 
   # and variance of the random error)
-  treatment_effect2 <- as.data.frame(rnorm(n = sampsizeremain, mean = avg_treatment, sd = sqrt(tvar_treatment)))
+  treatment_effect2 <- as.data.frame(rnorm(n = sampsizeremain, mean = avg_treatment_data, sd = sqrt(tvar_treatment)))
   random_error2 <- as.data.frame(rnorm(n = sampsizeremain*n_cycles, mean = 0, sd = sqrt(2*tvar_error)))
   
   # Duplicate the values for the treatment effect for each cycle 
@@ -204,8 +205,9 @@ reestim <- function(x, n_cycles = 3, avg_treatment = 1, N = 10000, seed = 323948
   }
   }
   
-  # Calculate the total power
-  pwr <- sum(output[,3]/N)
+  # Calculate the total power/alpha rate (power if avg_treatment_data = 1, alpha rate
+  # if avg_treatment_data = 0)
+  pwr_or_alpha <- sum(output[,3]/N)
   
   # Calculate the mean sample sizes
   initialsampsize <- mean(sampsizehyp)
@@ -214,7 +216,10 @@ reestim <- function(x, n_cycles = 3, avg_treatment = 1, N = 10000, seed = 323948
   remainingsampsize <- mean(sampsizeremain)
   
   # Output
-  return(list(pwr, initialsampsize, initialsampsize2, finalsampsize, remainingsampsize))
+  return(list(pwr_or_alpha, initialsampsize, initialsampsize2, finalsampsize, remainingsampsize))
 }
 
+
+
+################################################################################
 

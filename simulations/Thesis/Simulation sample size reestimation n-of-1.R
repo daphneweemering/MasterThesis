@@ -17,7 +17,7 @@ x <- expand.grid(hvar_treatment, hvar_error, tvar_treatment, tvar_error, fn)
 
 # Use apply to use the function 'reestim' from the file 'Interim n-reestimation
 # n-of-1 trial.R' to all the rows of x
-initial <- apply(x, 1, reestim)  
+initial <- apply(x, 1, reestim)
 
 # Unlist 'initial'
 temp <- t(as.data.frame(lapply(initial, unlist)))
@@ -34,7 +34,7 @@ names(results)[2] <- 'hyp_sigma'
 names(results)[3] <- 'true_psi'
 names(results)[4] <- 'true_sigma'
 names(results)[5] <- 'fraction'
-names(results)[6] <- 'power'
+names(results)[6] <- 'power_or_alpha'
 names(results)[7] <- 'initsampsize'
 names(results)[8] <- 'f_initsampsize'
 names(results)[9] <- 'reestimsampsize'

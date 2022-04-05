@@ -14,7 +14,7 @@ library(lmerTest)
 # on these interim estimates, the sample size is recalculated and the remaining 
 # subjects are observed and the parameters are again estimated. This process is
 # iterated N times and after looping through N iterations, power is calculated. 
-reestim <- function(x, n_cycles = 3, avg_treatment_sampsize = 1, avg_treatment_data = 0,
+reestim <- function(x, n_cycles = 3, avg_treatment_sampsize = 1, avg_treatment_data = 1,
                     N = 10000, seed = 3239480){
   
   # Specify which value from list x is what
@@ -211,12 +211,16 @@ reestim <- function(x, n_cycles = 3, avg_treatment_sampsize = 1, avg_treatment_d
   
   # Calculate the mean sample sizes
   initialsampsize <- mean(sampsizehyp)
-  initialsampsize2 <- mean(sampsizefrac)
-  finalsampsize <- mean(sampsizefinal)
-  remainingsampsize <- mean(sampsizeremain)
+  initialsampsize2 <- mean(output[,1])
+  finalsampsize <- mean(output[,2])
+  
+  # Calculate the variances 
+  varfinalsampsize <- var(output[,2])
+  sdfinalsampsize <- sd(output[,2])
   
   # Output
-  return(list(pwr_or_alpha, initialsampsize, initialsampsize2, finalsampsize, remainingsampsize))
+  return(list(pwr_or_alpha, initialsampsize, initialsampsize2, finalsampsize,
+              varfinalsampsize, sdfinalsampsize))
 }
 
 

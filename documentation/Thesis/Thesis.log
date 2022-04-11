@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020) (preloaded format=pdflatex 2020.11.5)  30 MAR 2022 12:46
+This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020) (preloaded format=pdflatex 2020.11.5)  6 APR 2022 12:25
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1001,14 +1001,14 @@ File: t1cmtt.fd 2019/12/16 v2.5j Standard LaTeX font definitions
 LaTeX Warning: Reference `tab:table1' on page 4 undefined on input line 125.
 
 [4] [5]
-<Thesis_files/figure-latex/unnamed-chunk-2-1.pdf, id=126, 493.845pt x 438.63875
+<Thesis_files/figure-latex/unnamed-chunk-2-1.pdf, id=129, 493.845pt x 438.63875
 pt>
 File: Thesis_files/figure-latex/unnamed-chunk-2-1.pdf Graphic file (type pdf)
 <use Thesis_files/figure-latex/unnamed-chunk-2-1.pdf>
 Package pdftex.def Info: Thesis_files/figure-latex/unnamed-chunk-2-1.pdf  used 
 on input line 191.
 (pdftex.def)             Requested size: 493.84378pt x 438.63766pt.
-<Thesis_files/figure-latex/unnamed-chunk-4-1.pdf, id=128, 475.7775pt x 435.6275
+<Thesis_files/figure-latex/unnamed-chunk-4-1.pdf, id=131, 475.7775pt x 435.6275
 pt>
 File: Thesis_files/figure-latex/unnamed-chunk-4-1.pdf Graphic file (type pdf)
 <use Thesis_files/figure-latex/unnamed-chunk-4-1.pdf>
@@ -1016,7 +1016,7 @@ Package pdftex.def Info: Thesis_files/figure-latex/unnamed-chunk-4-1.pdf  used
 on input line 209.
 (pdftex.def)             Requested size: 475.77632pt x 435.62643pt.
 [6] [7 <./Thesis_files/figure-latex/unnamed-chunk-2-1.pdf>]
-<Thesis_files/figure-latex/unnamed-chunk-6-1.pdf, id=159, 479.7925pt x 435.6275
+<Thesis_files/figure-latex/unnamed-chunk-6-1.pdf, id=163, 479.7925pt x 435.6275
 pt>
 File: Thesis_files/figure-latex/unnamed-chunk-6-1.pdf Graphic file (type pdf)
 <use Thesis_files/figure-latex/unnamed-chunk-6-1.pdf>
@@ -1024,13 +1024,7 @@ Package pdftex.def Info: Thesis_files/figure-latex/unnamed-chunk-6-1.pdf  used
 on input line 229.
 (pdftex.def)             Requested size: 479.7913pt x 435.62643pt.
 [8 <./Thesis_files/figure-latex/unnamed-chunk-4-1.pdf>] [9 <./Thesis_files/figu
-re-latex/unnamed-chunk-6-1.pdf>] (./Thesis.bbl
-Underfull \hbox (badness 2080) in paragraph at lines 17--23
-[]\T1/stix/m/n/10.03749 Duan N, Kravitz RL, Schmid CH. Single-patient (n-of-1) 
-tri-als: a prag-matic clin-i-cal deci-sion method-ol-ogy for
- []
-
-[10])
+re-latex/unnamed-chunk-6-1.pdf>] (./Thesis.bbl [10])
 Package atveryend Info: Empty hook `BeforeClearDocument' on input line 250.
 [11]
 Package atveryend Info: Empty hook `AfterLastShipout' on input line 250.
@@ -1043,13 +1037,13 @@ LaTeX Warning: There were undefined references.
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 250.
  ) 
 Here is how much of TeX's memory you used:
- 16170 strings out of 480608
- 228032 string characters out of 5903630
- 497277 words of memory out of 5000000
- 31669 multiletter control sequences out of 15000+600000
+ 16174 strings out of 480608
+ 228121 string characters out of 5903630
+ 492293 words of memory out of 5000000
+ 31672 multiletter control sequences out of 15000+600000
  619053 words of font info for 125 fonts, out of 8000000 for 9000
  1167 hyphenation exceptions out of 8191
- 49i,11n,46p,1319b,477s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 49i,11n,46p,1319b,473s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/local/texlive/2020/texmf-dist/fonts/enc/dvips/stix/stix-t1.enc}{/usr/lo
 cal/texlive/2020/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t1.enc}</usr/loca
 l/texlive/2020/texmf-dist/fonts/type1/public/stix/STIXGeneral-Bold.pfb></usr/lo
@@ -1060,10 +1054,10 @@ r/local/texlive/2020/texmf-dist/fonts/type1/public/stix/STIXGeneral-Regular.pfb
 sr/local/texlive/2020/texmf-dist/fonts/type1/public/stix/stix-mathex.pfb></usr/
 local/texlive/2020/texmf-dist/fonts/type1/public/stix/stix-mathit.pfb></usr/loc
 al/texlive/2020/texmf-dist/fonts/type1/public/stix/stix-mathrm.pfb>
-Output written on Thesis.pdf (11 pages, 265530 bytes).
+Output written on Thesis.pdf (11 pages, 266739 bytes).
 PDF statistics:
- 329 PDF objects out of 1000 (max. 8388607)
- 296 compressed objects within 3 object streams
- 75 named destinations out of 1000 (max. 500000)
+ 333 PDF objects out of 1000 (max. 8388607)
+ 300 compressed objects within 3 object streams
+ 76 named destinations out of 1000 (max. 500000)
  160 words of extra memory for PDF output out of 10000 (max. 10000000)
 

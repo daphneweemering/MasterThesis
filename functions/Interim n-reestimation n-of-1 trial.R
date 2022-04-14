@@ -98,9 +98,9 @@ reestim <- function(x, n_cycles = 3, avg_treatment_sampsize = 1, avg_treatment_d
   # Estimate the mean treatment effect and store
   out <- lmer(formula = d_ij ~ 1 + (1 | patient), data = dat)
   
-  # Extract the fixed effects and their t-value (respectively)
+  # Extract the fixed effects and their p-value (respectively)
   estim[,1] <- summary(out)$coefficients[1,1]
-  estim[,2] <- summary(out)$coefficients[1,4]
+  estim[,2] <- summary(out)$coefficients[1,5]
   
   # Extract the sd of the random intercept and the residual (respectively)
   temp <- as.data.frame(VarCorr(out))
@@ -139,7 +139,7 @@ reestim <- function(x, n_cycles = 3, avg_treatment_sampsize = 1, avg_treatment_d
     
     # Indicate all the significant results with a 1 and non-significant results with 
     # a 0
-    output[i,3] <- ifelse(estim[,2] < 1.96, 0, 1)
+    output[i,3] <- ifelse(estim[,2] < 0.05, 1, 0)
   } else{
   
   # Make storage for the simulated values of the variance of the treatment effect 
@@ -185,9 +185,9 @@ reestim <- function(x, n_cycles = 3, avg_treatment_sampsize = 1, avg_treatment_d
   # Estimate the mean treatment effect and store
   out2 <- lmer(formula = d_ij_full ~ 1 + (1 | patient), data = dat2)
   
-  # Extract the fixed effects and the t-value (respectively)
+  # Extract the fixed effects and the p-value (respectively)
   estimfinal[,1] <- summary(out2)$coefficients[1,1]
-  estimfinal[,2] <- summary(out2)$coefficients[1,4]
+  estimfinal[,2] <- summary(out2)$coefficients[1,5]
   
   # Extract the sd of the random intercept and the residual (respectively)
   temp <- as.data.frame(VarCorr(out2))
@@ -201,7 +201,7 @@ reestim <- function(x, n_cycles = 3, avg_treatment_sampsize = 1, avg_treatment_d
   
   # Indicate all the significant results with a 1 and non-significant results with 
   # a 0
-  output[i,3] <- ifelse(estimfinal[,2] < 1.96, 0, 1)
+  output[i,3] <- ifelse(estimfinal[,2] < 0.05, 1, 0)
   }
   }
   

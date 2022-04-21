@@ -98,11 +98,11 @@ reestim <- function(x, n_cycles = 3, avg_treatment_sampsize = 1, avg_treatment_d
     # Estimate the mean treatment effect and store
     out <- lmer(formula = d_ij ~ 1 + (1 | patient), data = dat)
     
-    # Extract the fixed effects and their t-value (respectively)
+    # Extract the fixed effects and their p-value (respectively)
     estim[,1] <- summary(out)$coefficients[1,1]
-    estim[,2] <- summary(out)$coefficients[1,4]
+    estim[,2] <- summary(out)$coefficients[1,5]
     
-    output[i,1] <- ifelse(estim[,2] < 1.96, 0, 1)
+    output[i,1] <- ifelse(estim[,2] < 0.05, 1, 0)
   }
   
   # Calculate the total power/alpha rate (power if avg_treatment_data = 1, alpha rate

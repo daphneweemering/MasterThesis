@@ -22,7 +22,6 @@ reestim <- function(x, n_cycles = 3, avg_treatment_sampsize = 1, avg_treatment_d
   hvar_error <- x[2]
   tvar_treatment <- x[3]
   tvar_error <- x[4]
-  fn <- x[5]
   
   # Set a seed for reproducibility
   set.seed(seed)
@@ -50,13 +49,8 @@ reestim <- function(x, n_cycles = 3, avg_treatment_sampsize = 1, avg_treatment_d
                             sig.level = 0.05, type = "one.sample", alternative = "two.sided")
     }
     
-    # Extract the sample size from 'pwrcalc'
-    sampsizehyp <- pwrcalc$n
-    
-    # Calculate the fraction (c(0.25, 0.5, 0.75)) of the initial sample size. After
-    # observing this fraction, sample size reestimation is performed
-    sampsizefrac <- ceiling(fn*sampsizehyp)
-    
+    # Extract the rounded sample size from 'pwrcalc'
+    sampsizehyp <- ceiling(pwrcalc$n)
     
     # ----------------------------------------------------------------------------
     # 2. Use the hypothesized sample size for sample size reestimation: estimate 
@@ -64,21 +58,21 @@ reestim <- function(x, n_cycles = 3, avg_treatment_sampsize = 1, avg_treatment_d
     #    \psi^2 and \sigma^2
     
     # Create a dataframe including patients, cycles and an index
-    dat = data.frame(patient   = factor(sort(rep((1:sampsizefrac), n_cycles))),
-                     cycle     = factor(rep(sort(rep(1:n_cycles)), sampsizefrac)),
-                     index     = factor(rep(c(1:(n_cycles)), sampsizefrac)))
+    dat = data.frame(patient   = factor(sort(rep((1:sampsizehyp), n_cycles))),
+                     cycle     = factor(rep(sort(rep(1:n_cycles)), sampsizehyp)),
+                     index     = factor(rep(c(1:(n_cycles)), sampsizehyp)))
     
     # Make storage for the simulated values of the variance of the treatment effect 
     # and the variance of the random error 
-    treatment_effect <- matrix(data = NA, nrow = 1, ncol = sampsizefrac)
-    random_error <- matrix(data = NA, nrow = 1, ncol = sampsizefrac*n_cycles)
+    treatment_effect <- matrix(data = NA, nrow = 1, ncol = sampsizehyp)
+    random_error <- matrix(data = NA, nrow = 1, ncol = sampsizehyp*n_cycles)
     
     # Make storage for the simulated value of the outcome 
-    d_ij <- matrix(data = NA, nrow = 1, ncol = sampsizefrac*n_cycles)
+    d_ij <- matrix(data = NA, nrow = 1, ncol = sampsizehyp*n_cycles)
     
     # First, simulate values for \psi^2 and \sigma^2
-    treatment_effect <- as.data.frame(rnorm(n = sampsizefrac, mean = avg_treatment_data, sd = sqrt(tvar_treatment)))
-    random_error <- as.data.frame(rnorm(n = sampsizefrac*n_cycles, mean = 0, sd = sqrt(2*tvar_error)))
+    treatment_effect <- as.data.frame(rnorm(n = sampsizehyp, mean = avg_treatment_data, sd = sqrt(tvar_treatment)))
+    random_error <- as.data.frame(rnorm(n = sampsizehyp*n_cycles, mean = 0, sd = sqrt(2*tvar_error)))
     
     # Duplicate the values for the treatment effect for each cycle 
     treatment_effect <- (sapply(treatment_effect, rep, each = 3))
@@ -93,7 +87,7 @@ reestim <- function(x, n_cycles = 3, avg_treatment_sampsize = 1, avg_treatment_d
     
     # Make storage for the estimated values of the fixed intercept, \psi^2, \sigma^2
     # and the t-value of the estimates.
-    estim <- matrix(data = NA, nrow = 1, ncol = 4)
+    estim <- matrix(data = NA, nrow = 1, ncol = 2)
     
     # Estimate the mean treatment effect and store
     out <- lmer(formula = d_ij ~ 1 + (1 | patient), data = dat)

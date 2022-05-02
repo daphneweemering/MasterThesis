@@ -22,18 +22,22 @@ initial <- apply(x, 1, reestim)
 temp <- t(as.data.frame(lapply(initial, unlist)))
 
 # Combine x and 'initial'
-results <- cbind(x, temp)
+resultsfixedpower <- cbind(x, temp)
 
 # Remove the long rownames from 'results'
-rownames(results) <- c()
+rownames(resultsfixedpower) <- c()
 
 # Change the column names for the 'initial' matrix (for interpretability)
-names(results)[1] <- 'hyp_psi'
-names(results)[2] <- 'hyp_sigma'
-names(results)[3] <- 'true_psi'
-names(results)[4] <- 'true_sigma'
-names(results)[5] <- 'fraction'
-names(results)[6] <- 'power'
+names(resultsfixedpower)[1] <- 'hyp_psi'
+names(resultsfixedpower)[2] <- 'hyp_sigma'
+names(resultsfixedpower)[3] <- 'true_psi'
+names(resultsfixedpower)[4] <- 'true_sigma'
+names(resultsfixedpower)[5] <- 'power_fixed'
+
+# Save the results in a separate file
+setwd('/Users/daphneweemering/Google Drive/UU/Thesis/MasterThesis/data/Raw data')
+save.image(file = 'power-fixed.RData')
+
 
 
 

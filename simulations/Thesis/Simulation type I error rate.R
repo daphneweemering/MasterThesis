@@ -1,4 +1,5 @@
-# 'Interim sample size reestimation for adequately powered series of N-of-1 trials' 
+#### Simulations for estimating type I error rate for series of N-of-1 trials with 
+#### sample size reestimation
 
 library(lme4)
 library(pwr)
@@ -23,35 +24,26 @@ initial <- apply(x, 1, reestim)
 temp <- t(as.data.frame(lapply(initial, unlist)))
 
 # Combine x and 'initial'
-results <- cbind(x, temp)
+resultsalpha <- cbind(x, temp)
 
 # Remove the long rownames from 'results'
-rownames(results) <- c()
+rownames(resultsalpha) <- c()
 
 # Change the column names for the 'initial' matrix (for interpretability)
-names(results)[1] <- 'hyp_psi'
-names(results)[2] <- 'hyp_sigma'
-names(results)[3] <- 'true_psi'
-names(results)[4] <- 'true_sigma'
-names(results)[5] <- 'fraction'
-names(results)[6] <- 'power_or_alpha'
-names(results)[7] <- 'initsampsize'
-names(results)[8] <- 'f_initsampsize'
-names(results)[9] <- 'reestimsampsize'
-names(results)[10] <- 'final_minus_initial'
+names(resultsalpha)[1] <- 'hyp_psi'
+names(resultsalpha)[2] <- 'hyp_sigma'
+names(resultsalpha)[3] <- 'true_psi'
+names(resultsalpha)[4] <- 'true_sigma'
+names(resultsalpha)[5] <- 'fraction'
+names(resultsalpha)[6] <- 'alpha'
+names(resultsalpha)[7] <- 'initialsampsize'
+names(resultsalpha)[8] <- 'f_initsampsize'
+names(resultsalpha)[9] <- 'reestimsampsize'
+names(resultsalpha)[10] <- 'var_reestimsampsize'
+names(resultsalpha)[11] <- 'sd_reestimsampsize'
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+# Save the results in a separate file
+setwd('//Users/daphneweemering/Google Drive/UU/Thesis/MasterThesis/data/Raw data')
+save.image(file = 'type1errorrate.RData')
 
 

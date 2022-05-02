@@ -218,9 +218,14 @@ reestim <- function(x, n_cycles = 3, avg_treatment_sampsize = 1, avg_treatment_d
   varfinalsampsize <- var(output[,2])
   sdfinalsampsize <- sd(output[,2])
   
+  # Give the median, min and max values for the reestimated sample size
+  medreestim <- median(output[,2])
+  minreestim <- min(output[,2])
+  maxreestim <- max(output[,2])
+  
   # Output
   return(list(pwr_or_alpha, initialsampsize, initialsampsize2, finalsampsize,
-              varfinalsampsize, sdfinalsampsize))
+              varfinalsampsize, sdfinalsampsize, medreestim, minreestim, maxreestim))
 }
 
 

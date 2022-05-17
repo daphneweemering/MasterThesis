@@ -1,13 +1,20 @@
-#### Data modification of data for power and type I error rate for series of
-#### N-of-1 trials with interim sample size reestimation
+# THESIS: 'Interim sample size reestimation for adequately powered series of N-of-1 trials' 
+# Daphne Weemering, 3239480, M&S for the Behavioral, Biomedical and Social Sciences,
+# Utrecht University
 
-# Load in packages
-library(dplyr)
-library(tibble)
+# Load in the required packages 
+library(dplyr)  # To use the 'mutate' function
+library(tibble) # To use the 'add_column' function
 
-# Set working directory to where the data of the simulation study is stored and
-# load in the data for the power and type I error rate
-setwd('/Users/daphneweemering/Google Drive/UU/Thesis/MasterThesis/data/Raw data')
+# ------------------------------------------------------------------------------
+# This file modifies the output from the simulation studies where interim sample 
+# size reestimation was applied in series of N-of-1 trials so that it can be used
+# for plotting. 
+# ------------------------------------------------------------------------------
+
+# Set working directory to where the output of the simulation study is stored and
+# load in the output for the power and type I error rate
+setwd('/Users/daphneweemering/Google Drive/UU/Thesis/MasterThesis/output/Raw output')
 load('power-reestimation.RData')
 load('type1errorrate.RData')
 
@@ -47,7 +54,8 @@ results$fraction_cat <- as.character(ifelse(results$fraction < 0.30, '0.25',
 # Paste 'f = ' in front of every value of 'fraction_cat'
 results$fraction_cat <- paste0("f = ", results$fraction_cat)
 
-# Combine 'true_sigma_cat' and 'true_psi_cat' into one variable
+# Combine 'true_sigma_cat' and 'true_psi_cat' into one variable and include '&'
+# sign
 results$true_sigma_psi <- paste(results$true_sigma_cat, results$true_psi_cat, sep = " & ")
 results$hyp_sigma_psi <- paste(results$hyp_sigma_cat, results$hyp_psi_cat, sep = " & ")
 
@@ -62,14 +70,9 @@ results <- mutate(results, hline = case_when(true_sigma_cat == '0.25' & true_psi
                                              true_sigma_cat == '1' & true_psi_cat == '1' ~ 15.1, 
                                              true_sigma_cat == '1' & true_psi_cat == '2' ~ 22.9))
 
-# Paste 'sigma' and 'psi' in the facet labels
-#results$true_sigma_cat <- paste0("sigma_t^2 = ", results$true_sigma_cat)
-#results$true_psi_cat <- paste0("psi_t^2 = ", results$true_psi_cat)
-
-# Change the working directory and save the modified data in a separate file
-setwd('/Users/daphneweemering/Google Drive/UU/Thesis/MasterThesis/data/Modified data')
+# Change the working directory and save the modified output in a separate file
+setwd('/Users/daphneweemering/Google Drive/UU/Thesis/MasterThesis/output/Modified output')
 save(results, file = 'data-for-plotting-reestimation.RData')
-
 
 
 

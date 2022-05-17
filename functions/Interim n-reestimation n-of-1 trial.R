@@ -1,4 +1,6 @@
-# 'Interim sample size reestimation for adequately powered series of N-of-1 trials' 
+# THESIS: 'Interim sample size reestimation for adequately powered series of N-of-1 trials' 
+# Daphne Weemering, 3239480, M&S for the Behavioral, Biomedical and Social Sciences,
+# Utrecht University
 
 # Load in the required packages 
 library(lme4)     # For the 'lmer' function fitting the linear mixed models
@@ -94,8 +96,7 @@ reestim <- function(x, n_cycles = 3, avg_treatment_sampsize = 1, avg_treatment_d
     # for the first stage of the two-stage design
     sampsizefrac <- ceiling(fn*sampsizehyp)
     
-    # Create a dataframe including patients, cycles and an index. In this matrix
-    # the generated data will be stored for the fraction of the initial sample size
+    # Create a dataframe including patients, cycles and an index
     dat = data.frame(patient   = factor(sort(rep((1:sampsizefrac), n_cycles))),
                      cycle     = factor(rep(sort(rep(1:n_cycles)), sampsizefrac)),
                      index     = factor(rep(c(1:(n_cycles)), sampsizefrac)))
@@ -272,4 +273,3 @@ reestim <- function(x, n_cycles = 3, avg_treatment_sampsize = 1, avg_treatment_d
 }
 
 # ------------------------------------------------------------------------------
-

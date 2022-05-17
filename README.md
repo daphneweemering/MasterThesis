@@ -24,7 +24,8 @@ The repository contains the following folders/files:
 ## Access, permission and ethics
 The creation and maintenance of this research repository are the responsibilities of the author. This archive is completely open access, and can be accessed for an indefinite period. 
 
-<a rel="license" href="http://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by/4.0/88x31.
+<a rel="license" href="http://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.
+
 This work is licensed under a [Creative Commons Attribution 4.0 International License (CC BY 4.0)](https://creativecommons.org/licenses/by/4.0/). This implies that you are free to copy and redistribute the material in any medium or format, and that you can remix, transform and build upon the material for any purpose, even commercially. However, under the following terms: You must give appropriate credit, provide a link to the license, and indicate if changes were made. You may do so in any reasonable manner, but not in a way that suggests the licensor endorses you or your use. Furthermore, you may not apply legal terms or technological measures that legally restrict others from doing anything the license permits. See also [this link](https://creativecommons.org/licenses/by/4.0/) for more information. 
 
 Ethical approval was obtained from the Ethical Review Board of the Faculty of Social and Behavioural Sciences of Utrecht University. 

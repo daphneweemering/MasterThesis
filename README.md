@@ -1,4 +1,4 @@
-# 'MasterThesis' - Master thesis project at UMC Utrecht
+# Master thesis project at UMC Utrecht
 This repository contains all material related to my master thesis for the program 'Methodology and Statistics for the Behavioural, Biomedical and Social Sciences' at Utrecht University, The Netherlands.
 
 - Name: Daphne Weemering

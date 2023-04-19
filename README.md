@@ -4,7 +4,7 @@ This repository contains all material related to my master thesis for the progra
 - Name: Daphne Weemering
 - Project's name: *Interim sample size reestimation for adequately powered series of N-of-1 trials*
 - Date: June 16, 2022
-- Email: dnweemering@gmail.com / d.n.weemering@students.uu.nl
+- Email: dnweemering@gmail.com 
 
 ## What is the project about?
 For this master thesis project, I am investigating the usefulness of interim sample size reestimation for combined N-of-1 trials, under the supervision of Peter van de Ven at the UMC Utrecht. Combined N-of-1 trials recently gained interest for studying the effectiveness of interventions in rare diseases. Rare diseases pose a major challenge for the identification of effective treatments as conventional randomized controlled trials generally require a infeasible number of subjects. Combining separate N-of-1 trials allows for estimation of the population treatment effect. The number of trials necessary is determined beforehand by means of sample size calculations. These calculations are particularly challenging because relevant parameters are generally unknown at the design stage of a study. 
